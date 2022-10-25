@@ -1,19 +1,35 @@
 import http from '@/common/http-common'
 
-const addressHouseList = async (dongCode) => {
-	let addressHouseList = [];
+const addressHouseInfoList = async (dongCode) => {
+	let addressHouseInfoList = [];
 	await http
 		.get(`/houseinfo/address/${encodeURIComponent(dongCode)}`)
 		.then((res) => {
-			addressHouseList = res.data.addressHouses;
-			console.log('api houseinfo.js addressHouseList res: ', res);
+			addressHouseInfoList = res.data.addressHouses;
+			console.log('api houseinfo.js addressHouseInfoList res: ', res);
 		})
 		.catch((err) => {
-			console.error('api houseinfo.js addressHouseList err: ', err);
+			console.error('api houseinfo.js addressHouseInfoList err: ', err);
 		})
-	return addressHouseList
+	return addressHouseInfoList
+}
+
+const nameHouseInfoList = async (houseName) => {
+	console.log('api houseinfo.js nameHouseInfoList called');
+	let nameHouseInfoList = [];
+	await http
+		.get(`/houseinfo/name/${encodeURIComponent(houseName)}`)
+		.then((res) => {
+			nameHouseInfoList = res.data.nameHouses;
+			console.log('api houseinfo.js nameHouseInfoList res: ', res);
+		})
+		.catch((err) => {
+			console.error('api houseinfo.js nameHouseInfoList err: ', err);
+		})
+	return nameHouseInfoList
 }
 
 export {
-	addressHouseList
+	addressHouseInfoList,
+	nameHouseInfoList
 }

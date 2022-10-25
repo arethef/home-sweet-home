@@ -6,7 +6,6 @@ import 'wave-ui/dist/wave-ui.css'
 import router from './router/index.js'
 import store from './store/index.js'
 
-
 // new Vue({
 //   render: h => h(App),
 //   router,

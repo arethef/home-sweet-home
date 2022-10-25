@@ -1,6 +1,6 @@
 <template>
   <div>
-    <!-- <p>FooterView.vue</p> -->
+    <p>BookmarkPage.vue</p>
   </div>
 </template>
 
@@ -8,4 +8,5 @@
 export default {};
 </script>
 
-<style></style>
+<style>
+</style>

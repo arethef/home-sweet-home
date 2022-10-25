@@ -1,5 +1,5 @@
 const express = require('express')
-const { Sequelize } = require('sequelize')
+const { Op } = require('sequelize')
 const router = express.Router()
 
 const HouseInfo = require('../models/houseinfo')
@@ -10,9 +10,12 @@ router
       const addressHouses = await HouseInfo.findAll({
         where: {
           dongCode: req.params.dongCode
-        }
+        },
+        order: [
+          ['apartmentName', 'ASC']
+        ]
       })
-      console.log('routes houseinfo.js /address houses: ', addressHouses);
+      console.log('routes houseinfo.js /address addressHouses: ', addressHouses);
       res
         .status(200)
         .json({
@@ -20,6 +23,31 @@ router
         })
     } catch (err) {
       console.error('routes houseinfo.js /address err: ', err);
+      next(err)
+    }
+  })
+
+router
+  .get('/name/:houseName', async (req, res, next) => {
+    try {
+      const nameHouses = await HouseInfo.findAll({
+        where: {
+          apartmentName: {
+            [Op.like]: '%'+req.params.houseName+'%'
+          }
+        },
+        order: [
+          ['apartmentName', 'ASC']
+        ]
+      })
+      console.log('routes houseinfo.js /name nameHouses: ', nameHouses);
+      res
+        .status(200)
+        .json({
+          nameHouses
+        })
+    } catch (err) {
+      console.error('routes houseinfo.js /name err: ', err);
       next(err)
     }
   })

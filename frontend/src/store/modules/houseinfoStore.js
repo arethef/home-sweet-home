@@ -3,43 +3,43 @@
 export default {
   namespaced: true,
   state: {
-    houseList: [],
-    houseSelected: null,
+    houseInfoList: [],
+    houseInfoSelected: null,
   },
   getters: {
-    getHouseList(state) {
-      return state.houseList
+    getHouseInfoList(state) {
+      return state.houseInfoList
     },
-    getHouseSelected(state) {
-      return state.houseSelected
+    getHouseInfoSelected(state) {
+      return state.houseInfoSelected
     }
   },
   mutations: {
-    CLEAR_HOUSE_LIST: (state) => {
-      state.houseList = [];
+    CLEAR_HOUSE_INFO_LIST: (state) => {
+      state.houseInfoList = [];
     },
-    CLEAR_HOUSE_SELECTED: (state) => {
-      state.houseSelected = null;
+    CLEAR_HOUSE_INFO_SELECTED: (state) => {
+      state.houseInfoSelected = null;
     },
-    SET_HOUSE_LIST: (state, houseList) => {
-      state.houseList = houseList;
+    SET_HOUSE_INFO_LIST: (state, houseInfoList) => {
+      state.houseInfoList = houseInfoList;
     },
-    SET_HOUSE_SELECTED: (state, houseSelected) => {
-      state.houseSelected = houseSelected;
+    SET_HOUSE_INFO_SELECTED: (state, houseInfoSelected) => {
+      state.houseInfoSelected = houseInfoSelected;
     }
   },
   actions: {
-    clearHouseList: ({ commit }) => {
-      commit('CLEAR_HOUSE_LIST')
+    clearHouseInfoList: ({ commit }) => {
+      commit('CLEAR_HOUSE_INFO_LIST')
     },
-    clearHouseSelected: ({ commit }) => {
-      commit('CLEAR_HOUSE_SELECTED')
+    clearHouseInfoSelected: ({ commit }) => {
+      commit('CLEAR_HOUSE_INFO_SELECTED')
     },
-    setHouseList: ({ commit }, houseList) => {
-      commit('SET_HOUSE_LIST', houseList)
+    setHouseInfoList: ({ commit }, houseInfoList) => {
+      commit('SET_HOUSE_INFO_LIST', houseInfoList)
     },
-    setHouseSelected: ({ commit }, houseSelected) => {
-      commit('SET_HOUSE_SELECTED', houseSelected)
+    setHouseInfoSelected: ({ commit }, houseInfoSelected) => {
+      commit('SET_HOUSE_INFO_SELECTED', houseInfoSelected)
     }
   }
 }

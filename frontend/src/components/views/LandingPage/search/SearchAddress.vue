@@ -1,36 +1,41 @@
 <template>
   <div>
-    <p>SearchAddress.vue</p>
+    <!-- <p>SearchAddress.vue</p> -->
     <w-flex>
-      <w-select :items="sidos" v-model="currSido" outline>시/도</w-select>
-      <w-select :items="guguns" v-model="currGugun" outline>구/군</w-select>
-      <w-select :items="dongs" v-model="currDong" outline>동</w-select>
+      <w-select :items="sidos" v-model="currSidoName" outline>시/도</w-select>
+      <w-select :items="guguns" v-model="currGugunName" outline>구/군</w-select>
+      <w-select :items="dongs" v-model="currDongName" outline>동</w-select>
     </w-flex>
-    <w-button class="mt4 mb8" @click="getAddressHouseList">검색</w-button>
-    <!-- <w-button class="mt4 mb8" @click="onClickSeoulBtn">Seoul</w-button>
-    <w-button class="mt4 mb8" @click="onClickSeongdongBtn">Seongdong</w-button> -->
+    <w-button class="mt4 mb8" @click="getAddressHouseInfoList">검색</w-button>
+    <house-info-table
+      :curr-house-info-list="currAddressHouseInfoList"
+    ></house-info-table>
   </div>
 </template>
 
 <script>
 // import http from "@/common/http-common.js";
 // import { dongcodeStore } from "@/store/store.js";
-import { houseinfoStore } from "@/store/store.js";
+import { houseinfoStore, dongcodeStore } from "@/store/store.js";
 import { sidoList, gugunList, dongList, dongInfo } from "@/api/dongcode.js";
-import { addressHouseList } from "@/api/houseinfo.js";
+import { addressHouseInfoList } from "@/api/houseinfo.js";
 import { mapActions, mapGetters, mapState } from "vuex";
+import HouseInfoTable from "@/components/views/LandingPage/HouseInfoTable";
 export default {
   name: "SearchAddress",
+  components: {
+    HouseInfoTable,
+  },
   data() {
     return {
-      currSido: null,
-      currGugun: null,
-      currDong: null,
+      currSidoName: null,
+      currGugunName: null,
+      currDongName: null,
       sidos: [],
       guguns: [],
       dongs: [],
       currDongCode: null,
-      currAddressHouseList: null,
+      currAddressHouseInfoList: null,
     };
   },
   created() {
@@ -38,43 +43,55 @@ export default {
   },
   unmounted() {},
   watch: {
-    currSido() {
-      console.log("SearchAddress.vue watch currSido: ", this.currSido);
-      this.currGugun = null;
+    currSidoName() {
+      console.log("SearchAddress.vue watch currSidoName: ", this.currSidoName);
+      this.currGugunName = null;
       this.guguns = [];
-      this.currDong = null;
+      this.currDongName = null;
       this.dongs = [];
       this.getGugunList();
-      return this.currSido;
+      return this.currSidoName;
     },
-    currGugun() {
-      console.log("SearchAddress.vue watch currGugun: ", this.currGugun);
-      this.currDong = null;
+    currGugunName() {
+      console.log(
+        "SearchAddress.vue watch currGugunName: ",
+        this.currGugunName
+      );
+      this.currDongName = null;
       this.dongs = [];
       this.getDongList();
-      return this.currGugun;
+      return this.currGugunName;
     },
-    currDong() {
-      console.log("SearchAddress.vue watch currDong: ", this.currDong);
+    currDongName() {
+      console.log("SearchAddress.vue watch currDongName: ", this.currDongName);
       this.getDongInfo();
-      return this.currDong;
+      return this.currDongName;
     },
   },
   computed: {
-    // ...mapState(dongcodeStore, ["sidoName", "gugunName", "dongName"]),
-    ...mapState(houseinfoStore, ["houseList"]),
-    ...mapGetters(houseinfoStore, ["getHouseList"]),
+    ...mapState(houseinfoStore, ["houseInfoList"]),
+    ...mapGetters(houseinfoStore, ["getHouseInfoList"]),
+    ...mapState(dongcodeStore, [
+      "sidoNameSelected",
+      "gugunNameSelected",
+      "dongNameSelected",
+      "dongCodeSelected",
+    ]),
+    ...mapGetters(dongcodeStore, [
+      "getSidoNameSelected",
+      "getGugunNameSelected",
+      "getDongNameSelected",
+      "getDongCodeSelected",
+    ]),
   },
   methods: {
-    // ...mapActions(dongcodeStore, [
-    //   "setSidoName",
-    //   "setGugunName",
-    //   "setDongName",
-    //   "clearSidoName",
-    //   "clearGugunName",
-    //   "clearDongName",
-    // ]),
-    ...mapActions(houseinfoStore, ["setHouseList"]),
+    ...mapActions(houseinfoStore, ["setHouseInfoList"]),
+    ...mapActions(dongcodeStore, [
+      "setSidoNameSelected",
+      "setGugunNameSelected",
+      "setDongNameSelected",
+      "setDongCodeSelected",
+    ]),
     async getSidoList() {
       await sidoList().then((res) => {
         console.log("SearchAddress.vue methods getSidoList res: ", res);
@@ -85,7 +102,7 @@ export default {
     },
     async getGugunList() {
       console.log("SearchAddress.vue methods getGugunList called");
-      await gugunList(this.currSido).then((res) => {
+      await gugunList(this.currSidoName).then((res) => {
         console.log("SearchAddress.vue methods getGugunList res: ", res);
         res.forEach((gugun) => {
           this.guguns.push({ label: gugun });
@@ -94,7 +111,7 @@ export default {
     },
     async getDongList() {
       console.log("SearchAddress.vue methods getDongList called");
-      await dongList(this.currGugun, this.currSido).then((res) => {
+      await dongList(this.currGugunName, this.currSidoName).then((res) => {
         console.log("SearchAddress.vue methods getDongList res: ", res);
         res.forEach((dong) => {
           this.dongs.push({ label: dong });
@@ -103,39 +120,40 @@ export default {
     },
     async getDongInfo() {
       console.log("SearchAddress.vue methods getDongInfo called");
-      await dongInfo(this.currDong, this.currGugun, this.currSido).then(
-        (res) => {
-          console.log("SearchAddress.vue methods getDongInfo res: ", res);
-          this.currDongCode = res.dongCode;
-        }
-      );
+      await dongInfo(
+        this.currDongName,
+        this.currGugunName,
+        this.currSidoName
+      ).then((res) => {
+        console.log("SearchAddress.vue methods getDongInfo res: ", res);
+        this.currDongCode = res.dongCode;
+      });
       console.log(
         "SearchAddress.vue methods this.currDongCode: ",
         this.currDongCode
       );
     },
-    async getAddressHouseList() {
-      await addressHouseList(this.currDongCode).then((res) => {
-        console.log("SearchAddress.vue methods getAddressHouseList res: ", res);
-        this.currAddressHouseList = res;
+    async getAddressHouseInfoList() {
+      await addressHouseInfoList(this.currDongCode).then((res) => {
+        console.log(
+          "SearchAddress.vue methods getAddressHouseInfoList res: ",
+          res
+        );
+        this.currAddressHouseInfoList = res;
       });
       console.log(
-        "SearchAddress.vue methods getAddressHouseList this.currAddressHouseList: ",
-        this.currAddressHouseList
+        "SearchAddress.vue methods getAddressHouseInfoList this.currAddressHouseInfoList: ",
+        this.currAddressHouseInfoList
       );
-      this.setHouseList(this.currAddressHouseList);
+      this.setHouseInfoList(this.currAddressHouseInfoList);
       console.log(
-        "SearchAddress.vue methods getAddressHouseList this.getHouseList: ",
-        this.getHouseList
+        "SearchAddress.vue methods getAddressHouseInfoList this.getHouseInfoList: ",
+        this.getHouseInfoList
       );
-      console.log(
-        "SearchAddress.vue methods getAddressHouseList this.houseList: ",
-        this.houseList
-      );
-      console.log(
-        "SearchAddress.vue methods getAddressHouseList this.houseList[0]: ",
-        this.houseList[0]
-      );
+      this.setSidoNameSelected(this.currSidoName);
+      this.setGugunNameSelected(this.currGugunName);
+      this.setDongNameSelected(this.currDongName);
+      this.setDongCodeSelected(this.currDongCode);
     },
   },
 };

@@ -3,8 +3,11 @@
     <!-- NavBar.vue -->
     <router-link :to="{ name: 'landingPage' }">LandingPage | </router-link>
     <router-link :to="{ name: 'boardPage' }">BoardPage | </router-link>
-    <router-link :to="{ name: 'noticePage' }">NoticePage | </router-link>
-    <router-link :to="{ name: 'newsPage' }">NewsPage | </router-link>
+    <!-- <router-link :to="{ name: 'noticePage' }">NoticePage | </router-link> -->
+    <!-- <router-link :to="{ name: 'newsPage' }">NewsPage | </router-link> -->
+    <!-- <router-link v-if="this.getIsLoggedIn" :to="{ name: 'bookmarkPage' }"
+      >BookmarkPage |
+    </router-link> -->
     <router-link v-if="!this.getIsLoggedIn" :to="{ name: 'registerPage' }"
       >SignUp |
     </router-link>

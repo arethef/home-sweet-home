@@ -11,12 +11,17 @@ module.exports = class Board extends Sequelize.Model {
         type: Sequelize.TEXT,
         allowNull: false
       },
+      writer: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+      }
     }, {
       sequelize,
       timestamps: true,
       modelName: 'Board',
       tableName: 'board',
-      paranoid: false,
+      // paranoid: false,
+      paranoid: true,
       charset: 'utf8mb4',
       collate: 'utf8mb4_general_ci'
     })

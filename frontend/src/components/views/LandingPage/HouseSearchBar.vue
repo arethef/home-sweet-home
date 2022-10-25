@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>HouseSearchBar.vue</p>
+    <!-- <p>HouseSearchBar.vue</p> -->
     <div>
       <p>검색 기준</p>
       <w-radios
@@ -9,7 +9,10 @@
         inline
       ></w-radios>
     </div>
-    <search-address v-if="this.searchCriteria === 'address'"></search-address>
+    <search-address
+      @on-click-house-info-list-search-btn="onClickHouseInfoListSearchBtn"
+      v-if="this.searchCriteria === 'address'"
+    ></search-address>
     <search-name v-if="this.searchCriteria === 'name'"></search-name>
   </div>
 </template>
@@ -30,6 +33,11 @@ export default {
         { label: "이름", value: "name" },
       ],
     };
+  },
+  methods: {
+    onClickHouseInfoListSearchBtn() {
+      this.$emit("onClickHouseInfoListSearchBtn");
+    },
   },
 };
 </script>

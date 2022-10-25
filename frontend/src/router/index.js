@@ -4,6 +4,7 @@ import LandingPage from '@/components/views/LandingPage/LandingPage.vue'
 import BoardPage from '@/components/views/BoardPage/BoardPage.vue'
 import NoticePage from '@/components/views/NoticePage/NoticePage.vue'
 import NewsPage from '@/components/views/NewsPage/NewsPage.vue'
+import BookmarkPage from '@/components/views/BookmarkPage/BookmarkPage.vue'
 import RegisterPage from '@/components/views/RegisterPage/RegisterPage.vue'
 import LoginPage from '@/components/views/LoginPage/LoginPage.vue'
 import MyPage from '@/components/views/MyPage/MyPage.vue'
@@ -41,6 +42,14 @@ const routes = [
     path: '/news',
     name: 'newsPage',
     component: NewsPage,
+    meta: {
+      roles: []
+    }
+  },
+  {
+    path: '/bookmark',
+    name: 'bookmarkPage',
+    component: BookmarkPage,
     meta: {
       roles: []
     }
