@@ -10,7 +10,7 @@
       @row-select="onClickBoardItem($event)"
     ></w-table>
     <w-overlay
-      v-model="showOverlay"
+      v-model="showOverlayBoardDetail"
       :persistent="persistent"
       :persistent-no-animation="persistentNoAnimation"
       :opacity="opacity"
@@ -21,7 +21,9 @@
             <div class="title3">{{ currBoardItemTitle }}</div>
             <div class="spacer"></div>
             <span class="ml2">
-              <w-icon class="mr2" @click="showOverlay = false">wi-cross</w-icon>
+              <w-icon class="mr2" @click="showOverlayBoardDetail = false"
+                >wi-cross</w-icon
+              >
             </span>
           </w-toolbar>
         </template>
@@ -52,8 +54,35 @@
           </div>
           <div v-if="this.onEdit">
             <w-button @click="onClickCancelBtn">취소</w-button>
-            <w-button @click="onClickDoneBtn">완료</w-button>
+            <w-button @click="onClickDoneUpdateBtn">완료</w-button>
           </div>
+        </div>
+      </w-card>
+    </w-overlay>
+    <w-overlay
+      v-model="showOverlayBoardCreate"
+      :persistent="persistent"
+      :persistent-no-animation="persistentNoAnimation"
+      :opacity="opacity"
+    >
+      <w-card tile bg-color="white" lg class="ml8 mr8">
+        <template #title>
+          <w-toolbar>
+            <div>새 글 작성</div>
+            <div class="spacer"></div>
+            <span class="ml2">
+              <w-icon class="mr2" @click="showOverlayBoardCreate = false"
+                >wi-cross</w-icon
+              >
+            </span>
+          </w-toolbar>
+        </template>
+        <div id="board-content">
+          <div class="title3">제목</div>
+          <div class="title3">내용</div>
+        </div>
+        <div>
+          <w-button @click="onClickDoneCreateBtn">완료</w-button>
         </div>
       </w-card>
     </w-overlay>
@@ -83,7 +112,8 @@ export default {
         forceSelection: false,
       },
       boardList: [],
-      showOverlay: false,
+      showOverlayBoardDetail: false,
+      showOverlayBoardCreate: false,
       opacity: 0.3,
       persistent: false,
       persistentNoAnimation: false,
@@ -104,12 +134,17 @@ export default {
       console.log("BoardPage.vue methods onClickCancelBtn() called");
       this.onEdit = false;
     },
-    onClickDoneBtn() {
-      console.log("BoardPage.vue methods onClickDoneBtn() called");
+    onClickDoneUpdateBtn() {
+      console.log("BoardPage.vue methods onClickDoneUpdateBtn() called");
       this.onEdit = false;
+    },
+    onClickDoneCreateBtn() {
+      console.log("BoardPage.vue methods onClickDoneCreateBtn() called");
+      this.showOverlayBoardCreate = false;
     },
     onClickBoardCreateBtn() {
       console.log("BoardPage.vue methods onClickBoardCreateBtn clicked");
+      this.showOverlayBoardCreate = true;
     },
     onClickBoardItem(event) {
       console.log("BoardPage.vue methods onClickBoardItem event: ", event);
@@ -119,7 +154,7 @@ export default {
       this.currBoardItemWriter = event.item.writer;
       this.currBoardItemCreatedAt = event.item.createdAt;
       this.currBoardItemUpdatedAt = event.item.updatedAt;
-      this.showOverlay = true;
+      this.showOverlayBoardDetail = true;
     },
     async getBoardList() {
       this.boardList = [];
