@@ -28,7 +28,40 @@ const createBoard = async (boardInfo) => {
 	return resCreateBoard
 }
 
+const updateBoard = async (boardInfo) => {
+	let resUpdateBoard;
+	await http
+		.post(`/board/update`, boardInfo)
+		.then((res) => {
+			console.log('api board.js updateBoard res: ', res);
+			resUpdateBoard = res.data.boardInfo;
+		})
+		.catch((err) => {
+			console.error('api board.js updateBoard err: ', err);
+		})
+	return resUpdateBoard
+}
+
+const deleteBoard = async (boardInfo) => {
+	console.log('api board.js deleteBoard boardInfo: ', boardInfo);
+	let resDeleteBoard;
+	await http
+		.delete(`/board/delete`, {
+			data: boardInfo
+		})
+		.then((res) => {
+			console.log('api board.js deleteBoard res: ', res);
+			resDeleteBoard = res.data.deleteResult
+		})
+		.catch((err) => {
+			console.error('api board.js deleteBoard err: ', err);
+		})
+	return resDeleteBoard
+}
+
 export {
 	boardList,
 	createBoard,
+	updateBoard,
+	deleteBoard,
 }

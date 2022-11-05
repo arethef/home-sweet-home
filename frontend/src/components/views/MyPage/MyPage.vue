@@ -2,7 +2,22 @@
   <div>
     MyPage
     <w-flex column align-center justify-center>
-      <w-button class="mt4" @click="onClickUserInfoBtn">UserInfo</w-button>
+      <div style="width: 30%">
+        <w-flex>
+          <div class="title4 mb2 pal xs4">이메일</div>
+          <div class="title4 mb2 pal xs8">{{ this.userInfo.email }}</div>
+        </w-flex>
+        <w-flex>
+          <div class="title4 mb2 pal xs4">회원</div>
+          <div class="title4 mb2 pal xs8">
+            {{ this.userInfo.role === "0" ? "일반" : "관리자" }}
+          </div>
+        </w-flex>
+        <w-flex>
+          <div class="title4 mb2 pal xs4">가입일</div>
+          <div class="title4 mb2 pal xs8">{{ this.userInfo.created_at }}</div>
+        </w-flex>
+      </div>
       <w-button class="mt4 mb8" @click="onClickAccountWithdrawalBtn"
         >AccountWithdrawal</w-button
       >
@@ -41,9 +56,6 @@ export default {
   // },
   methods: {
     ...mapActions(userStore, ["userUserInfo"]),
-    async onClickUserInfoBtn() {
-      await this.userUserInfo(sessionStorage.getItem("userId"));
-    },
     async onClickAccountWithdrawalBtn() {
       console.log("MyPage.vue methods onClickAccountWithdrawalBtn clicked");
       await http
